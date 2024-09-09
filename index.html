@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Smart</title>
+
+    <!-- ربط Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="logo.png" rel="icon">
+
+    <!-- ربط خط Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- ربط Quill.js -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+<body>
+    <header>
+        <img id="logo" src="https://lh3.googleusercontent.com/-qvogSiDXv1A/VhE2QlT970I/AAAAAAAAkHU/voORgrp3zyU/s1600/palestine-flag-animation.gif" alt="Logo">
+        <img id="logo1" src="logo.png">
+        <div class="social-icons" style="position: absolute; right: 10px; top: 10px;">
+            <span></span>
+            <a href="https://www.linkedin.com/in/ali-elkholy" target="_blank">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://ali-elkholy.github.io/About/" target="_blank" style="margin-left: 10px;">
+                <i class="fas fa-globe"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="controls">
+        <button id="startButton" class="btn btn-primary">ابدأ الإستماع</button>
+        <button id="stopButton" class="btn btn-secondary" disabled>إيقاف الإستماع</button>
+        <button id="saveButton" class="btn btn-success">حفظ كملف وورد</button>
+    </div>
+
+    <div id="editor-container">
+        <div id="editor">
+            <!-- محتوى المحرر -->
+        </div>
+    </div>
+
+    <!-- Modal Confirmation -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    هل أنت متأكد أنك تريد إيقاف الإستماع ؟
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-danger" id="confirmStopButton" data-bs-dismiss="modal">نعم </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        جميع الحقوق محفوظة&copy; لدى <a href="https://www.linkedin.com/in/ali-elkholy" target="_blank">Ali ELkholy</a>
+    </footer>
+
+    <!-- ربط مكتبة Quill.js -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const confirmStopButton = document.getElementById('confirmStopButton');
+        const saveButton = document.getElementById('saveButton');
+        let recognition;
+        let finalTranscript = '';
+
+        // تهيئة Quill.js
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'كل ما أسمعه يظهر هنا',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['link', 'blockquote', 'code-block'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                ]
+            }
+        });
+
+        // Speech Recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ar'; // Arabic as the primary language
+            recognition.continuous = true; // Continuous recognition
+            recognition.interimResults = true; // Show interim results for real-time transcription
+
+            // Start recording
+            startButton.addEventListener('click', () => {
+                recognition.start();
+                startButton.style.display = 'none';
+                stopButton.style.display = 'inline-block';
+                stopButton.disabled = false;
+            });
+
+            // Open modal for stopping recording
+            stopButton.addEventListener('click', () => {
+                const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                modal.show();
+            });
+
+            // Stop recording when confirmed in modal
+            confirmStopButton.addEventListener('click', () => {
+                recognition.stop();
+                startButton.style.display = 'inline-block';
+                stopButton.style.display = 'none';
+                stopButton.disabled = true;
+            });
+
+            // Handle recognition results
+            recognition.onresult = function(event) {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    interimTranscript += event.results[i][0].transcript + ' ';
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' ';
+                    }
+                }
+                quill.root.innerHTML = finalTranscript + interimTranscript; // إضافة النصوص الجديدة للنص النهائي مع النص المؤقت
+            };
+
+            // Ensure recording doesn't stop unless explicitly stopped
+            recognition.onend = function() {
+                if (!stopButton.disabled) {
+                    recognition.start(); // Restart recognition if it stops unexpectedly
+                }
+            };
+
+            // Handle speech recognition errors
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error detected: ' + event.error);
+                recognition.stop();
+                recognition.start(); // Restart recognition in case of error
+            };
+        } else {
+            alert('المتصفح الخاص بك لا يدعم التعرف على الصوت.');
+        }
+
+        // Save as Word file
+        saveButton.addEventListener('click', function() {
+            const editorContent = quill.root.innerHTML;
+
+            // Convert HTML content to a Word document structure (basic)
+            const wordContent = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+                    <head><style>
+                        body { font-family: 'Tajawal', sans-serif; }
+                        h1, h2, h3, p { margin: 0; padding: 0; }
+                    </style></head>
+                    <body>${editorContent}</body>
+                </html>
+            `;
+
+            // Create Blob object with the content
+            const blob = new Blob(['\uFEFF' + wordContent], {
+                type: 'application/msword'
+            });
+
+            // Create link to download the document
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'document.doc';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+ body {
+            font-family: 'Tajawal', sans-serif;
+          
+            color: #333;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+    
+        }
+body {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+        header {
+            background-color: #;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        header img {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 50px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        header .social-icons {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        header .social-icons a {
+            color: #ffffff;
+            margin-left: 10px;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        #editor-container {
+            background-color: #ffffff;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 90%;
+            height: 200px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            font-size: 13px; /* حجم الخط داخل المحرر */
+            flex: 1;
+            overflow: auto;
+            border-radius: 5px
+            /* للتأكد من عدم تمدد المحرر */
+        } 
+     .ql-editor {
+            direction: rtl; /* توجيه النصوص العربية إلى اليمين */
+            font-family: 'Tajawal', sans-serif; /* الخط المستخدم داخل المحرر */
+            border: none;
+            text-align: right;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 20px;
+            padding-right: 29px
+        } 
+        .controls {
+            text-align: center;
+            margin-bottom: 10px;
+            margin-top: 10px
+        }
+        .controls button {
+            margin: 5px;
+        } 
+        footer {
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            width: 100%;
+        }
+        footer a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+i{
+    margin-right: 14px
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+} 
