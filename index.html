@@ -1,48 +1,94 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn Smart</title>
-
+    <title>Write For Me - Ali Elkholy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- ربط Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="logo.png" rel="icon">
-
+    <link href="write%20for%20me.png" rel="icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
     <!-- ربط خط Tajawal -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-
     <!-- ربط Quill.js -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- ربط مكتبة AOS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+    <style>
+
+    </style>
 </head>
 
 <body>
     <header>
         <img id="logo" src="https://lh3.googleusercontent.com/-qvogSiDXv1A/VhE2QlT970I/AAAAAAAAkHU/voORgrp3zyU/s1600/palestine-flag-animation.gif" alt="Logo">
-        <img id="logo1" src="logo.png">
-        <div class="social-icons" style="position: absolute; right: 10px; top: 10px;">
-            <span></span>
+
+        <div class="social-icons">
             <a href="https://www.linkedin.com/in/ali-elkholy" target="_blank">
                 <i class="fab fa-linkedin"></i>
             </a>
-            <a href="https://ali-elkholy.github.io/About/" target="_blank" style="margin-left: 10px;">
+            <a href="https://ali-elkholy.github.io/About/" target="_blank">
                 <i class="fas fa-globe"></i>
             </a>
+
         </div>
     </header>
-
+    <div id="splash">
+        <img src="write-for-me-unscreen.gif" alt="Logo">
+    </div>
     <div class="controls">
-        <button id="startButton" class="btn btn-primary">ابدأ الإستماع</button>
-        <button id="stopButton" class="btn btn-secondary" disabled>إيقاف الإستماع</button>
-        <button id="saveButton" class="btn btn-success">حفظ كملف وورد</button>
+        <!-- زرار اختيار اللغة -->
+        <div class="btn-group">
+            <button id="languageButton" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-aos="fade-down">
+                إختر اللغة التي تريد
+            </button>
+            <ul class="dropdown-menu" id="languageDropdown">
+                <!-- قائمة اللغات -->
+            </ul>
+        </div>
+        <button id="startButton" class="btn btn-success" data-aos="fade-up" disabled>
+            <i class="fas fa-play"></i>ابدأ الاستماع
+        </button>
+        <button id="stopButton" class="btn btn-danger" data-aos="fade-down" disabled>
+            <i class="fas fa-stop"></i>إيقاف الاستماع
+        </button>
+        <button id="saveButton" class="btn btn-primary" data-aos="fade-up">
+            <i class="fas fa-save"></i>حفظ كملف وورد
+        </button>
+        <button id="translateButton" class="btn btn-warning" data-aos="fade-down">
+            <i class="fas fa-language"></i>ترجم النص
+        </button>
+        <button id="summarizeButton" class="btn btn-info" data-aos="fade-up">
+            <i class="fas fa-summarize"></i>ملخص النص
+        </button>
+        <button id="restoreButton" class="btn btn-danger" style="display: none;">
+            <i class="fas fa-undo"></i>إرجاع النص الأصلي
+        </button>
+
+        <div id="translationLanguages" style="display: none;">
+            <button class="btn btn-light ar" data-lang="ar"><i class="fi fi-ps"></i>العربية</button>
+            <button class="btn btn-light en" data-lang="en"><i class="fi fi-us"></i>الإنجليزية</button>
+            <button class="btn btn-light fs" data-lang="fr"><i class="fi fi-fr"></i>الفرنسية</button>
+            <button class="btn btn-light sp" data-lang="es"><i class="fi fi-es"></i>الإسبانية</button>
+            <button class="btn btn-light gr" data-lang="de"><i class="fi fi-de"></i>الألمانية</button>
+            <button class="btn btn-light it" data-lang="it"><i class="fi fi-it"></i>الإيطالية</button>
+            <button class="btn btn-light rs" data-lang="ru"><i class="fi fi-ru"></i>الروسية</button>
+            <button class="btn btn-light jp" data-lang="ja"><i class="fi fi-jp"></i>اليابانية</button>
+            <button class="btn btn-light kr" data-lang="ko"><i class="fi fi-kr"></i>الكورية</button>
+            <button class="btn btn-light pr" data-lang="pt"><i class="fi fi-pt"></i>البرتغالية</button>
+            <button class="btn btn-light in" data-lang="hi"><i class="fi fi-in"></i>الهندية</button>
+        </div>
     </div>
 
     <div id="editor-container">
         <div id="editor">
-            <!-- محتوى المحرر -->
+
+
         </div>
     </div>
 
@@ -51,138 +97,287 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel"></h5>
+                    <h5 class="modal-title" id="confirmModalLabel">تأكيد</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    هل أنت متأكد أنك تريد إيقاف الإستماع ؟
+                    هل أنت متأكد أنك تريد إيقاف الاستماع؟
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="button" class="btn btn-danger" id="confirmStopButton" data-bs-dismiss="modal">نعم </button>
+                    <button type="button" class="btn btn-danger" id="confirmStopButton" data-bs-dismiss="modal">نعم</button>
                 </div>
             </div>
         </div>
     </div>
 
     <footer>
-        جميع الحقوق محفوظة&copy; لدى <a href="https://www.linkedin.com/in/ali-elkholy" target="_blank">Ali ELkholy</a>
+        جميع الحقوق محفوظة &copy; لدى <a href="https://www.linkedin.com/in/ali-elkholy" target="_blank">Ali ELkholy</a>
     </footer>
 
     <!-- ربط مكتبة Quill.js -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- ربط مكتبة AOS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- ربط مكتبة Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        const startButton = document.getElementById('startButton');
-        const stopButton = document.getElementById('stopButton');
-        const confirmStopButton = document.getElementById('confirmStopButton');
-        const saveButton = document.getElementById('saveButton');
-        let recognition;
-        let finalTranscript = '';
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickSound = new Audio('click.wav');
+            const startButton = document.getElementById('startButton');
+            const stopButton = document.getElementById('stopButton');
+            const confirmStopButton = document.getElementById('confirmStopButton');
+            const saveButton = document.getElementById('saveButton');
+            const summarizeButton = document.getElementById('summarizeButton');
+            const translateButton = document.getElementById('translateButton');
+            const restoreButton = document.getElementById('restoreButton');
+            const languageButton = document.getElementById('languageButton');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const translationLanguages = document.getElementById('translationLanguages');
+            let recognition;
+            let finalTranscript = '';
+            let originalText = '';
+            const languages = {
+                "ar": "العربية",
+                "en": "الإنجليزية",
+                "fr": "الفرنسية",
+                "es": "الإسبانية",
+                "de": "الألمانية",
+                "it": "الإيطالية",
+                "ru": "الروسية",
+                "ja": "اليابانية",
+                "ko": "الكورية",
+                "pt": "البرتغالية",
+                "hi": "الهندية"
+            };
+            let currentLang = null;
 
-        // تهيئة Quill.js
-        const quill = new Quill('#editor', {
-            theme: 'snow',
-            placeholder: 'كل ما أسمعه يظهر هنا',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline'],
-                    ['link', 'blockquote', 'code-block'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }]
-                ]
+            // تهيئة Quill.js
+            const quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'كل ما أسمعه يظهر هنا',
+                modules: {
+                    toolbar: [
+                        [{
+                            'header': '1'
+                        }, {
+                            'header': '2'
+                        }],
+                        [{
+                            'list': 'ordered'
+                        }, {
+                            'list': 'bullet'
+                        }],
+                        ['bold', 'italic', 'underline'],
+                        [{
+                            'align': []
+                        }],
+                        ['link', 'image'],
+                        [{
+                            'color': []
+                        }, {
+                            'background': []
+                        }],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // حفظ واسترجاع محتوى المحرر من LocalStorage
+            function saveEditorContent() {
+                localStorage.setItem('editorContent', quill.root.innerHTML);
             }
-        });
 
-        // Speech Recognition
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'ar'; // Arabic as the primary language
-            recognition.continuous = true; // Continuous recognition
-            recognition.interimResults = true; // Show interim results for real-time transcription
+            function loadEditorContent() {
+                const savedContent = localStorage.getItem('editorContent');
+                if (savedContent) {
+                    quill.root.innerHTML = savedContent;
+                }
+            }
 
-            // Start recording
-            startButton.addEventListener('click', () => {
-                recognition.start();
-                startButton.style.display = 'none';
-                stopButton.style.display = 'inline-block';
-                stopButton.disabled = false;
+            loadEditorContent();
+            quill.on('text-change', saveEditorContent);
+
+            // إضافة قائمة اللغات للزر
+            Object.entries(languages).forEach(([code, name]) => {
+                const langOption = document.createElement('li');
+                const langLink = document.createElement('a');
+                langLink.classList.add('dropdown-item');
+                langLink.href = '#';
+                langLink.textContent = name;
+                langLink.onclick = function() {
+                    currentLang = code;
+                    languageButton.textContent = name;
+                    startButton.disabled = false; // تفعيل زر "ابدأ الاستماع"
+                };
+                langOption.appendChild(langLink);
+                languageDropdown.appendChild(langOption);
             });
 
-            // Open modal for stopping recording
-            stopButton.addEventListener('click', () => {
-                const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
-                modal.show();
-            });
+            // Speech Recognition
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
 
-            // Stop recording when confirmed in modal
-            confirmStopButton.addEventListener('click', () => {
-                recognition.stop();
-                startButton.style.display = 'inline-block';
-                stopButton.style.display = 'none';
-                stopButton.disabled = true;
-            });
+                startButton.addEventListener('click', () => {
+                    if (!currentLang) return; // تأكد من اختيار لغة
+                    recognition.lang = currentLang; // تعيين اللغة المختارة
+                    recognition.start();
+                    startButton.style.display = 'none';
+                    stopButton.style.display = 'inline-block';
+                    stopButton.disabled = false;
+                    languageButton.disabled = true; // تعطيل زر تغيير اللغة
+                });
 
-            // Handle recognition results
-            recognition.onresult = function(event) {
-                let interimTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    interimTranscript += event.results[i][0].transcript + ' ';
-                    if (event.results[i].isFinal) {
-                        finalTranscript += event.results[i][0].transcript + ' ';
+                stopButton.addEventListener('click', () => {
+                    const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                    modal.show();
+                });
+
+                confirmStopButton.addEventListener('click', () => {
+                    recognition.stop();
+                    startButton.style.display = 'inline-block';
+                    stopButton.style.display = 'none';
+                    stopButton.disabled = true;
+                    languageButton.disabled = false; // تفعيل زر تغيير اللغة بعد إيقاف الاستماع
+                });
+
+                recognition.onresult = function(event) {
+                    let interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        interimTranscript += event.results[i][0].transcript + ' ';
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript + ' ';
+                        }
                     }
+                    quill.root.innerHTML = finalTranscript + interimTranscript;
+                };
+
+                recognition.onend = function() {
+                    if (!stopButton.disabled) {
+                        recognition.start();
+                    }
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error detected: ' + event.error);
+                    recognition.stop();
+                    recognition.start();
+                };
+            } else {
+                alert('المتصفح الخاص بك لا يدعم التعرف على الصوت.');
+            }
+            // التعامل مع زر تلخيص النص
+            summarizeButton.addEventListener('click', function() {
+                clickSound.play();
+                let textToSummarize = quill.root.innerText;
+                try {
+                    // خوارزمية تلخيص نصي بسيطة (يمكنك تحسينها حسب الحاجة)
+                    summarizedText = textToSummarize.split('.').slice(0, 1).join('.') + '.';
+                    quill.root.innerHTML = summarizedText;
+                    originalText = textToSummarize; // حفظ النص الأصلي
+                    restoreButton.style.display = 'inline-block';
+                } catch (error) {
+                    console.error('Error summarizing text:', error);
                 }
-                quill.root.innerHTML = finalTranscript + interimTranscript; // إضافة النصوص الجديدة للنص النهائي مع النص المؤقت
-            };
-
-            // Ensure recording doesn't stop unless explicitly stopped
-            recognition.onend = function() {
-                if (!stopButton.disabled) {
-                    recognition.start(); // Restart recognition if it stops unexpectedly
-                }
-            };
-
-            // Handle speech recognition errors
-            recognition.onerror = function(event) {
-                console.error('Speech recognition error detected: ' + event.error);
-                recognition.stop();
-                recognition.start(); // Restart recognition in case of error
-            };
-        } else {
-            alert('المتصفح الخاص بك لا يدعم التعرف على الصوت.');
-        }
-
-        // Save as Word file
-        saveButton.addEventListener('click', function() {
-            const editorContent = quill.root.innerHTML;
-
-            // Convert HTML content to a Word document structure (basic)
-            const wordContent = `
-                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
-                    <head><style>
-                        body { font-family: 'Tajawal', sans-serif; }
-                        h1, h2, h3, p { margin: 0; padding: 0; }
-                    </style></head>
-                    <body>${editorContent}</body>
-                </html>
-            `;
-
-            // Create Blob object with the content
-            const blob = new Blob(['\uFEFF' + wordContent], {
-                type: 'application/msword'
             });
 
-            // Create link to download the document
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'document.doc';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // التعامل مع زر إرجاع النص الأصلي
+            restoreButton.addEventListener('click', function() {
+                clickSound.play();
+                quill.root.innerHTML = originalText;
+                restoreButton.style.display = 'none';
+            });
+            // حفظ كملف وورد
+            saveButton.addEventListener('click', function() {
+                const editorContent = quill.root.innerHTML;
+                const wordContent = `
+                    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+                        <head><style>
+                            body { font-family: 'Tajawal', sans-serif; }
+                            h1, h2, h3, p { margin: 0; padding: 0; }
+                        </style></head>
+                        <body>${editorContent}</body>
+                    </html>
+                `;
+                const blob = new Blob(['\uFEFF' + wordContent], {
+                    type: 'application/msword'
+                });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'document.doc';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // ترجمة النص عند الضغط على زر الترجمة
+            translateButton.addEventListener('click', () => {
+                translationLanguages.style.display = 'block';
+                restoreButton.style.display = 'inline-block';
+                originalText = quill.root.innerHTML; // حفظ النص الأصلي
+            });
+
+            // إرجاع النص الأصلي
+            restoreButton.addEventListener('click', () => {
+                quill.root.innerHTML = originalText;
+                translationLanguages.style.display = 'none';
+                restoreButton.style.display = 'none';
+            });
+
+            // ترجمة النص عند اختيار لغة
+            document.querySelectorAll('#translationLanguages button').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const targetLang = button.getAttribute('data-lang');
+                    const textToTranslate = quill.root.innerText;
+
+                    try {
+                        // استخدام Google Translate API غير الرسمية
+                        const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(textToTranslate)}`);
+                        const data = await response.json();
+                        const translatedText = data[0].map(item => item[0]).join('');
+                        quill.root.innerHTML = translatedText; // افترض أن API يرد بنص مترجم
+                        translationLanguages.style.display = 'none';
+                        restoreButton.style.display = 'inline-block';
+                    } catch (error) {
+                        console.error('Error translating text:', error);
+                    }
+                });
+            });
+
+            // تشغيل الصوت عند التركيز على الأزرار
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('focus', () => {
+                    clickSound.play();
+                });
+            });
+
+            // Initialize AOS
+            AOS.init();
         });
+        document.addEventListener('DOMContentLoaded', function() {
+            const splash = document.getElementById('splash');
+
+            // ضبط مدة بقاء السبلاش 3 ثواني ثم إزالته بالتدريج
+            setTimeout(() => {
+                splash.style.transition = 'opacity 0.5s ease-out'; // إضافة انتقال
+                splash.style.opacity = '0'; // إخفاء السبلاش تدريجيًا
+            }, 3000); // مدة بقاء السبلاش 3 ثوانٍ
+
+            // إزالة العنصر تمامًا بعد انتهاء الانتقال
+            splash.addEventListener('transitionend', () => {
+                splash.remove(); // إزالة العنصر بعد انتهاء الانتقال
+            });
+        });
+
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <scrip>
+
+    </scrip>
 </body>
+
 </html>
